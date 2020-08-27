@@ -1,6 +1,57 @@
 {
   "version": 1,
-  "projects": {},
+  "projects": {
+    "my-lib": {
+      "root": "libs/my-lib",
+      "sourceRoot": "libs/my-lib/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:lint",
+          "options": {
+            "linter": "eslint",
+            "tsConfig": [
+              "libs/my-lib/tsconfig.lib.json",
+              "libs/my-lib/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/my-lib/**/*"]
+          }
+        },
+        "build": {
+          "builder": "@nrwl/web:package",
+          "options": {
+            "outputPath": "dist/libs/my-lib",
+            "tsConfig": "libs/my-lib/tsconfig.lib.json",
+            "project": "libs/my-lib/package.json",
+            "entryFile": "libs/my-lib/src/index.ts",
+            "external": ["react", "react-dom"],
+            "babelConfig": "@nrwl/react/plugins/bundle-babel",
+            "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+            "assets": [
+              {
+                "glob": "README.md",
+                "input": ".",
+                "output": "."
+              }, {
+                "glob": "theming.styl",
+                "input": "libs/my-lib/src",
+                "output": "."
+              }
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/my-lib/jest.config.js",
+            "tsConfig": "libs/my-lib/tsconfig.spec.json",
+            "passWithNoTests": true
+          }
+        }
+      }
+    }
+  },
   "cli": {
     "defaultCollection": "@nrwl/workspace"
   }
